@@ -17,22 +17,31 @@ body {
     overflow: hidden;
     width: 400px;
     box-shadow: 0px 3px 6px 0px rgba(121, 36, 100, 0.24);
+    padding:  20px;
+    background: #F6F6F6;
 }
 
 .calculator_display {
-    font-size: 40px;
     text-align: right;
     background: #937DC2;
     color: #F6F6F6;
-    padding: 15px 20px;
-    height: 60px;
+    padding: 10px 20px;
+}
 
+.user-input {
+    font-size: 40px;
+    min-height: 64px;
+}
+
+.result {
+    font-size: 20px;
+    min-height: 32px;
 }
 
 .calculator_keys {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border: ;
+    
 }
 
 .calculator_key {
