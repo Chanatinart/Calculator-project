@@ -1,102 +1,137 @@
 const calculator = document.querySelector('.calculator');
-const keys = document.querySelector('.calculator_keys');
-const userInput = document.querySelector('#user-input');
-const displayResult = document.querySelector('#result');
-const previousKeyType = calculator.dataset.previousKeyType
+const numberBtn = document.querySelectorAll('.calculator_key');
+const operatorBtn = document.querySelectorAll('.key_operator')
+const userInput = document.getElementById('user-input');
+const displayResult = document.getElementById('result');
+const equalsButton = document.getElementById('equalsBtn');
+const deleteBtn = document.getElementById('delBtn')
+const clearBtn = document.getElementById('clearBtn')
+const decimal = document.getElementById('decimal')
+const plusMinusBtn = document.getElementById('positive-negative')
 
+const displayNum = userInput.textContent
+let resetDisplay = false
+let currentValue = null
 let firstValue = ''
+let secondValue = ''
 
 
-keys.addEventListener('click', e => {
-    if(e.target.matches('button')) {
-    const key = e.target
-    const action = key.dataset.action
-    const keyContent = key.textContent
-    const displayNum = userInput.textContent
-        if(
-            action === 'add' ||
-            action === 'subtract' ||
-            action === 'multiply' ||
-            action === 'divide'
-        ) {
-             const firstValue = calculator.dataset.firstValue
-             const operator = calculator.dataset.operator
-             const secondValue = displayNum
+numberBtn.forEach((button) =>
+button.addEventListener('click', () =>
+appendNumber(button.textContent))
+)
 
-             if (firstValue && operator) {
-                userInput.textContent = calculator(firstValue, operator, secondValue)
-  //                          firstValue = userInput.textContent
-    //        userInput.textContent = keyContent
-        //     displayResult.textContent = `${firstValue} ${keyContent}`
+operatorBtn.forEach((button) =>
+button.addEventListener('click', () =>
+operation(button.textContent))
+)
 
-           calculator.dataset.previousKeyType = 'operator'
+equalsButton.addEventListener('click', calculate)
+clearBtn.addEventListener('click', clear)
+deleteBtn.addEventListener('click', deleteNumber)
+decimal.addEventListener('click', appendDecimal)
+plusMinusBtn.addEventListener('click', )
 
-           calculator.dataset.firstValue = displayNum
+function appendNumber(number) {
+    if(userInput.textContent === '0' || resetDisplay)
+    resetScreen()
+    userInput.textContent += number
+}
 
-           calculator.dataset.operator = action
-             }
+function resetScreen() {
+    userInput.textContent = ''
+    resetDisplay = false
+}
 
-
-        } 
-        if(!action) {
-                if (displayNum === '0'|| 
-                    previousKeyType === 'operator') {
-                userInput.textContent = keyContent
-            } else {
-                userInput.textContent = displayNum + keyContent //append the clicked num to display num
-
-                calculator.dataset.previousKeyType = 'number'
-            }
-        }
-        if(action === 'decimal') {
-            if(!displayNum.includes('.')) {
-                userInput.textContent = displayNum + '.'   
-            } else if(previousKeyType === 'operator') {
-                userInput.textContent = '0.'
-            }
-            
-            calculator.dataset.previousKeyType = 'decimal'
-        }
-        if(action === 'clear') {
-            userInput.textContent =  '0'
-            displayResult.textContent = ''
-            calculator.dataset.previousKeyType = 'clear'
-
-        }
-        if(action === 'calculate') {
-            const firstValue = calculator.dataset.firstValue
-            const operator = calculator.dataset.operator
-            const secondValue = displayNum
-
-            const calculate = (n1, operator, n2) => {
-                let result = ''
-
-                if(operator === 'add') {
-                    result = parseFloat(n1) + parseFloat(n2)
-                } else if(operator === 'subtract') {
-                    result = parseFloat(n1) - parseFloat(n2)
-                } else if(operator === 'multiply') {
-                    result = parseFloat(n1) * parseFloat(n2)
-                } else if(operator === 'divide') {
-                    result = parseFloat(n1) / parseFloat(n2)
-                }
-                return result
-            calculator.dataset.previousKeyType = 'calculate'
-            }
-
-            userInput.textContent = calculate(firstValue, operator, secondValue)
-        }
-        if(action === 'delete') {
-            userInput.textContent = userInput.textContent
-            .toString()
-            .slice(0, -1)
-        }
-        if(action === 'positive-negative') {
-            console.log('ps key')
-        }
+function clear() {
+    userInput.textContent ='0'
+    displayResult.textContent = ''
+    firstValue = ''
+    secondValue = ''
+    currentValue = null
     }
-})
 
- //
-   //         displayResult.textContent = `${firstValue}${userInput}`
-     //       
+function appendDecimal() {
+    if(!displayNum.includes('.')) {
+        userInput.textContent = displayNum + '.'
+     } else if(currentValue === 'operator') {
+    userInput.textContent = '0.'
+    }
+}
+
+function deleteNumber() {
+    userInput.textContent = userInput.textContent
+    .slice(0, -1);
+}
+
+function reverseSign() {
+    if(userInput.textContent > 0) {
+        userInput.textContent = displayNum
+        displayNum = '-' + displayNum;    
+    } else {
+        displayNum = displayNum *-1;
+    }
+}
+
+function operation(operator) {
+    if(currentValue !== null) calculate()
+    firstValue = userInput.textContent
+    currentValue = operator
+    displayResult.textContent = `${firstValue} ${currentValue}`
+    resetDisplay = true
+}
+
+function calculate() {
+    if(currentValue === null || 
+        resetDisplay) return
+        if(currentValue === '÷' &&
+        userInput.textContent === '0') {
+            alert("You can't divide by 0!")
+            return
+        }
+        secondValue = userInput.textContent
+        userInput.textContent = result(
+            operate(currentValue, firstValue, secondValue)
+        )
+        displayResult.textContent = `${firstValue} ${currentValue} ${secondValue} =`
+            currentValue = null
+}
+
+function result(number) {
+    return Math.round(number * 1000) / 1000
+}
+
+function add(a,b) {
+    return a + b
+}
+
+function subtract(a,b) {
+    return a - b
+}
+
+function multiply(a,b) {
+    return a * b
+}
+
+function divide(a,b) {
+    return a / b
+}
+
+function operate(operator, a, b) {
+    a = Number(a)
+    b = Number(b)
+    switch(operator) {
+        case '+':
+            return add(a,b)
+        case '-':
+            return subtract(a,b)
+        case '*':
+            return multiply(a,b)
+        case '/':
+            if(b === 0) return null
+            else return divide(a,b)
+        default:
+            return null
+    }
+}
+

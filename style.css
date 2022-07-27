@@ -42,6 +42,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     
+    
 }
 
 .calculator_key {
@@ -81,4 +82,8 @@ body {
 
 .key_equal:hover {
     background-color: #fa7892;
+}
+
+button {
+    cursor: pointer; 
 }
