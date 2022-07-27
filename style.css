@@ -100,3 +100,12 @@ button {
 .other_key:hover {
     background-color: #f77979;
 }
+
+footer {
+  text-align: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 20px;
+  color:#7A4069;
+}
