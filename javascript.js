@@ -30,7 +30,7 @@ equalsButton.addEventListener('click', calculate)
 clearBtn.addEventListener('click', clear)
 deleteBtn.addEventListener('click', deleteNumber)
 decimal.addEventListener('click', appendDecimal)
-plusMinusBtn.addEventListener('click', )
+plusMinusBtn.addEventListener('click', reverseSign)
 
 function appendNumber(number) {
     if(userInput.textContent === '0' || resetDisplay)
@@ -66,10 +66,9 @@ function deleteNumber() {
 
 function reverseSign() {
     if(userInput.textContent > 0) {
-        userInput.textContent = displayNum
-        displayNum = '-' + displayNum;    
+        userInput.textContent = '-' + userInput.textContent   
     } else {
-        displayNum = displayNum *-1;
+        userInput.textContent = userInput.textContent *-1;
     }
 }
 
@@ -125,9 +124,9 @@ function operate(operator, a, b) {
             return add(a,b)
         case '-':
             return subtract(a,b)
-        case '*':
+        case '×':
             return multiply(a,b)
-        case '/':
+        case '÷':
             if(b === 0) return null
             else return divide(a,b)
         default:
